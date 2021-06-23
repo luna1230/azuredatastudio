@@ -25,7 +25,8 @@ export const enum ValidationType {
 	IsInteger = 'is_integer',
 	Regex = 'regex_match',
 	LessThanOrEqualsTo = '<=',
-	GreaterThanOrEqualsTo = '>='
+	GreaterThanOrEqualsTo = '>=',
+	Equals = '=='
 }
 
 export type ValidationInfo = RegexValidationInfo | IntegerValidationInfo | ComparisonValidationInfo;
@@ -181,12 +182,21 @@ export class GreaterThanOrEqualsValidation extends Comparison {
 	}
 }
 
+export class EqualsValidation extends Comparison {
+	async isComparisonSuccessful() {
+		const value = (await this.getValue());
+		const targetValue = (await this.getTargetValue(this.target));
+		return (isUndefinedOrEmpty(value) || isUndefinedOrEmpty(targetValue)) ? true : value! === targetValue!;
+	}
+}
+
 export function createValidation(validation: ValidationInfo, onValidation: OnValidation, valueGetter: ValueGetter, targetValueGetter?: TargetValueGetter, onTargetValidityChangedGetter?: OnTargetValidityChangedGetter, onDisposableCreated?: (disposable: vscode.Disposable) => void): Validation {
 	switch (validation.type) {
 		case ValidationType.Regex: return new RegexValidation(<RegexValidationInfo>validation, onValidation, valueGetter);
 		case ValidationType.IsInteger: return new IntegerValidation(<IntegerValidationInfo>validation, onValidation, valueGetter);
 		case ValidationType.LessThanOrEqualsTo: return new LessThanOrEqualsValidation(<ComparisonValidationInfo>validation, onValidation, valueGetter, targetValueGetter!, onTargetValidityChangedGetter!, onDisposableCreated!);
 		case ValidationType.GreaterThanOrEqualsTo: return new GreaterThanOrEqualsValidation(<ComparisonValidationInfo>validation, onValidation, valueGetter, targetValueGetter!, onTargetValidityChangedGetter!, onDisposableCreated!);
+		case ValidationType.Equals: return new EqualsValidation(<ComparisonValidationInfo>validation, onValidation, valueGetter, targetValueGetter!, onTargetValidityChangedGetter!, onDisposableCreated!);
 		default: throw new Error(`unknown validation type:${validation.type}`); //dev error
 	}
 }
