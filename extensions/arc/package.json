@@ -666,6 +666,10 @@
                               "type": "<=",
                               "target": "AZDATA_NB_VAR_POSTGRES_SERVER_GROUP_WORKERS_CORES_LIMIT",
                               "description": "%requested.cores.less.than.or.equal.to.cores.limit%"
+                            },
+                            {
+                              "type": "is_integer",
+                              "description": "%should.be.integer%"
                             }
                           ]
                         },
