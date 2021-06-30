@@ -147,7 +147,7 @@ export class ControllerModel {
 				this._onConfigUpdated.fire(this._controllerConfig);
 				throw err;
 			}),
-			this._azdataApi.azdata.arc.dc.endpoint.list(this.azdataAdditionalEnvVars, this.controllerContext).then(result => {
+			/* this._azdataApi.azdata.arc.dc.endpoint.list(this.azdataAdditionalEnvVars, this.controllerContext).then(result => {
 				this._endpoints = result.result;
 				this.endpointsLastUpdated = new Date();
 				this._onEndpointsUpdated.fire(this._endpoints);
@@ -160,7 +160,7 @@ export class ControllerModel {
 				}
 				this._onEndpointsUpdated.fire(this._endpoints);
 				throw err;
-			}),
+			}), */
 			Promise.all([
 				this._azdataApi.azdata.arc.postgres.server.list(this.azdataAdditionalEnvVars, this.controllerContext).then(result => {
 					newRegistrations.push(...result.result.map(r => {
