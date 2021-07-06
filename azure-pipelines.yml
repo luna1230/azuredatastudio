@@ -1,6 +1,3 @@
-trigger:
-  - main
-  - release/*
 
 jobs:
 - job: Windows
